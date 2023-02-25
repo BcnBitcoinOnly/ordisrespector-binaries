@@ -53,7 +53,7 @@ Bitcoin Core [24.0.1], [23.1], [22.1] and [0.21.2]
 
 1. Rename the verified binary to `bitcoind` (or `bitcoind.exe` if it's a Windows build).
 
-2. Locate the existing `bitcoind` binary in your node and replace it.
+2. Locate the existing `bitcoind` binary in your node and replace it (on Linux, usually at `/usr/local/bin/bitcoind`).
 
 3. Restart the Bitcoin Core service or reboot your node. Done! Enjoy a clean mempool.
 
@@ -68,7 +68,7 @@ If you do your own deterministic build and do this check yourself I invite you t
 
 ### Build Signers
 
-* [oomahq] - 24.0.1, 23.1, 22.1, 0.21.2, all architectures.
+* [oomahq] ([pubkey](https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x873a132853a3f6d6621dc366981836e35a42a039)) - 24.0.1, 23.1, 22.1, 0.21.2, all architectures.
 
 ## Other Resources
 
@@ -76,6 +76,7 @@ If you do your own deterministic build and do this check yourself I invite you t
 * MiniBolt guide to build a patched Bitcoin Core 24.0.1 (non-deterministic, easier than Guix), by [TwoFaktor](https://twitter.com/twofaktor): [https://minibolt.info/guide/bonus/bitcoin/ordisrespector.html](https://minibolt.info/guide/bonus/bitcoin/ordisrespector.html)
 * [MYNODE](https://mynodebtc.com/) Ordisrespector patching, official: [https://twitter.com/mynodebtc/status/1626242552776265730](https://twitter.com/mynodebtc/status/1626242552776265730)
 * [Umbrel](https://umbrel.com/) Ordisrespector patching guide by [AntePurgatorio](https://twitter.com/AntePurgatorio): [https://github.com/printer-jam/umbrel-ordisrespector](https://github.com/printer-jam/umbrel-ordisrespector)
+* [Citadel](https://runcitadel.space/) Ordisrespector patching guide by Zehks: [https://github.com/zehks/citadel-ordisrespector](https://github.com/zehks/citadel-ordisrespector)
 * [Start9's EmbassyOS](https://start9.com/) patched binaries by [MegaDisrespecter](https://twitter.com/MDisrespecter): [https://twitter.com/MDisrespecter/status/1628570118790983681](https://twitter.com/MDisrespecter/status/1628570118790983681)
 * Ordisrespector Docker images by [MaxMoney21M](https://twitter.com/max_money_21M): [https://github.com/maxmoney21m/ordisrespector](https://github.com/maxmoney21m/ordisrespector)
 * Ordisrespector thread #1, by [oomahq]: [https://twitter.com/oomahq/status/1621899175079051264](https://twitter.com/oomahq/status/1621899175079051264)
