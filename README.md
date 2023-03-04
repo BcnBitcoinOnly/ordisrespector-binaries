@@ -20,9 +20,9 @@ Bitcoin Core [24.0.1], [23.1], [22.1] and [0.21.2]
    | MacOS x64 (Intel)          | `*-x86_64-apple-darwin` `*-x86_64-apple-darwin18` |
    | Windows x64                | `*-x86_64-w64-mingw32`                            |
 
-   Also download the appropriate `SHASUMS256.txt` and `SHASUMS256-oomahq.asc` files for your chosen release and put everything in the same directory.
+   Also download the appropriate `SHA256SUMS.txt` and `SHA256SUMS-oomahq.asc` files for your chosen release and put everything in the same directory.
 
-2. Download [oomahq's GPG public key] and use it to verify the integrity on the SHASUMS256 file.
+2. Download [oomahq's GPG public key] and use it to verify the integrity on the SHA256SUMS file.
    You must see a `Good signature from "Unhosted Marcelus #371 <oomahq@twitter.com>" [unknown]` message in the output.
    ```sh
    $ gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 34BE269FE4268497E45588A884C9BB18153758B4
@@ -39,7 +39,7 @@ Bitcoin Core [24.0.1], [23.1], [22.1] and [0.21.2]
    Primary key fingerprint: 34BE 269F E426 8497 E455  88A8 84C9 BB18 1537 58B4
    ```
 
-3. If the signature is OK it means that the SHASUMS256 file has not been tampered.
+3. If the signature is OK it means that the SHA256SUMS file has not been tampered.
    Now you can safely use it to check the hash of the binary.
    On Linux, if both files are present in the same directory you can check the hash with this command:
 
@@ -63,7 +63,7 @@ Guix builds are deterministic, meaning that anyone can follow the same steps and
 
 Documentation of the build process is maintained in a [dedicated document].
 In the spirit of the Bitcoin ethos, you are encouraged to build your own binaries and verify that they are the same as I distributed in this repo.
-If you do your own deterministic build and do this check yourself I invite you to submit your own GPG signature of the SHASUMS256 file to boost the trust in these binaries.
+If you do your own deterministic build and do this check yourself I invite you to submit your own GPG signature of the SHA256SUMS file to boost the trust in these binaries.
 
 ### Build Signers
 

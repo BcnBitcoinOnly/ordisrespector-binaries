@@ -25,7 +25,7 @@ $ sudo apt install guix
 $ guix pull
 ```
 
-After the second command ends, it will suggest to add the following to lines to your `$HOME/.profile` file, do it:
+After the second command ends, it will suggest to add the following two lines to your `$HOME/.profile` file, do it:
 
 ```
 # append the following to $HOME/.profile:
@@ -133,49 +133,32 @@ $ cd bitcoin
 $ git checkout v24.0.1-ordisrespector
 ```
 
-Now for the most disrespectful part of the guide: while still inside the bitcoin repository, download the [`ordinals-filter.patch`] file and apply it to the source tree!
+At this point we must pause to explain why we are cloning a fork of Bitcoin Core instead of the official repository.
+It turns out that the Guix build system is deeply integrated with git, and simply patching the source locally will prompt Guix to erase our local changes when we start the build.
+Unless we commit the changes into the git repository Guix won't build them.
+And if everyone commits the changes by themselves we'd no longer have a deterministic build.
 
-```sh
-$ wget https://gist.githubusercontent.com/luke-jr/4c022839584020444915c84bdd825831/raw/555c8a1e1e0143571ad4ff394221573ee37d9a56/filter-ordinals.patch
-$ git apply filter-ordinals.patch
-```
+Therefore, we decided to fork Bitcoin Core to add the [`filter-ordinals.patch`] as a single commit after each of the tagged releases we provide in this repo.
 
-You can use `git diff` to check the changes you've made to the v24.0.1 codebase. They must look like this:
+In the following links you can use GitHub's "compare" UI to verify that we only did just that:
 
-```sh
-$ git diff
-diff --git a/src/script/interpreter.cpp b/src/script/interpreter.cpp
-index 5f4a1aceb..3eec7373f 100644
---- a/src/script/interpreter.cpp
-+++ b/src/script/interpreter.cpp
-@@ -479,6 +479,14 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript&
-                     return set_error(serror, SCRIPT_ERR_MINIMALDATA);
-                 }
-                 stack.push_back(vchPushValue);
-+                if ((flags & SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_NOPS) && opcode == OP_FALSE) {
-+                    auto pc_tmp = pc;
-+                    opcodetype next_opcode;
-+                    valtype dummy_data;
-+                    if (script.GetOp(pc_tmp, next_opcode, dummy_data) && next_opcode == OP_IF) {
-+                        return set_error(serror, SCRIPT_ERR_DISCOURAGE_UPGRADABLE_NOPS);
-+                    }
-+                }
-             } else if (fExec || (OP_IF <= opcode && opcode <= OP_ENDIF))
-             switch (opcode)
-             {
-```
+| Bitcoin Core Version | Comparison between bitcoin/bitcoin and BcnBitcoinOnly/bitcoin                                                                                                                                            |
+|----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 24.0.1               | [https://github.com/bitcoin/bitcoin/compare/v24.0.1...BcnBitcoinOnly:bitcoin:v24.0.1-ordisrespector](https://github.com/bitcoin/bitcoin/compare/v24.0.1...BcnBitcoinOnly:bitcoin:v24.0.1-ordisrespector) |
+| 23.1                 | [https://github.com/bitcoin/bitcoin/compare/v23.1...BcnBitcoinOnly:bitcoin:v23.1-ordisrespector](https://github.com/bitcoin/bitcoin/compare/v23.1...BcnBitcoinOnly:bitcoin:v23.1-ordisrespector)         |
+| 22.1                 | [https://github.com/bitcoin/bitcoin/compare/v22.1...BcnBitcoinOnly:bitcoin:v22.1-ordisrespector](https://github.com/bitcoin/bitcoin/compare/v22.1...BcnBitcoinOnly:bitcoin:v22.1-ordisrespector)         |
+| 0.21.2               | [https://github.com/bitcoin/bitcoin/compare/v0.21.2...BcnBitcoinOnly:bitcoin:v0.21.2-ordisrespector](https://github.com/bitcoin/bitcoin/compare/v0.21.2...BcnBitcoinOnly:bitcoin:v0.21.2-ordisrespector) |
 
-We're ready to start the build proper.
+If you're satisfied with the amendment we made to your chosen tagged release, we're now ready to start the build proper.
 The Guix build is governed by a series of environment variables that we'll now define.
 We start with the mandatory ones:
 
 ```sh
 $ export SOURCES_PATH="$HOME/depends-SOURCES_PATH"
 $ export BASE_CACHE="$HOME/depends-BASE_CACHE"
-$ export FORCE_DIRTY_WORKTREE=1
 ```
 
-This will instruct Guix to use the temporary build directories we created earlier, and to not be scared to build Bitcoin Core with "uncommitted changes" (the patch we just applied).
+This will simply instruct Guix to use the temporary build directories we created earlier.
 
 Now, if you want MacOS binaries also define this env var so that Guix can find the MacOS SDK:
 
@@ -208,50 +191,50 @@ Now it'd be a good time to let the machine do the deed and take a break.
 
 ## Verifying the result
 
-After the build completes it will have created a `guix-build-24.0.1` directory inside the `bitcoin` project.
-In turn, this directory will have a subdirectory for each target you built (in our case `distsrc-aarch64-linux-gnu`, `distsrc-arm64-apple-darwin` and `distsrc-x86_64-linux-gnu`).
-We are interested in the contents of `installed/bitcoin-24.0.1/bin` of each of these subdirectories.
+After the build completes it will have created a `guix-build-275e5239b095` directory inside the `bitcoin` project.
+In turn, this directory will have a subdirectory for each target you built (in our case `distsrc-275e5239b095-aarch64-linux-gnu`, `distsrc-275e5239b095-arm64-apple-darwin` and `distsrc-275e5239b095-x86_64-linux-gnu`).
+We are interested in the contents of `installed/bitcoin-275e5239b095/bin` of each of these subdirectories.
 In there you should find your `bitcoind` binary along with some other ones:
 
 ```sh
-$ ll guix-build-24.0.1/distsrc-24.0.1-x86_64-linux-gnu/installed/bitcoin-24.0.1/bin/
-total 510604
-drwxr-xr-x 2 you you      4096 feb 25 18:29 ./
-drwxr-xr-x 6 you you      4096 feb 25 18:29 ../
--rwxr-xr-x 1 you you   2412928 feb 25 18:29 bitcoin-cli*
--rwxr-xr-x 1 you you   7306856 feb 25 18:29 bitcoin-cli.dbg*
--rwxr-xr-x 1 you you  15339968 feb 25 18:29 bitcoind*
--rwxr-xr-x 1 you you  85049120 feb 25 18:29 bitcoind.dbg*
--rwxr-xr-x 1 you you  39586776 feb 25 18:29 bitcoin-qt*
--rwxr-xr-x 1 you you 111448808 feb 25 18:29 bitcoin-qt.dbg*
--rwxr-xr-x 1 you you   4112824 feb 25 18:29 bitcoin-tx*
--rwxr-xr-x 1 you you  13495160 feb 25 18:29 bitcoin-tx.dbg*
--rwxr-xr-x 1 you you   2199488 feb 25 18:29 bitcoin-util*
--rwxr-xr-x 1 you you   7766208 feb 25 18:29 bitcoin-util.dbg*
--rwxr-xr-x 1 you you   9686216 feb 25 18:29 bitcoin-wallet*
--rwxr-xr-x 1 you you  42753136 feb 25 18:29 bitcoin-wallet.dbg*
--rwxr-xr-x 1 you you  24893312 feb 25 18:29 test_bitcoin*
--rwxr-xr-x 1 you you 156774016 feb 25 18:29 test_bitcoin.dbg*
+$ ll guix-build-275e5239b095/distsrc-275e5239b095-x86_64-linux-gnu/installed/bitcoin-275e5239b095/bin/
+total 510620
+drwxr-xr-x 2 you you      4096 mar  4 12:27 ./
+drwxr-xr-x 6 you you      4096 mar  4 12:27 ../
+-rwxr-xr-x 1 you you   2412928 mar  4 12:27 bitcoin-cli*
+-rwxr-xr-x 1 you you   7306712 mar  4 12:27 bitcoin-cli.dbg*
+-rwxr-xr-x 1 you you  15339968 mar  4 12:27 bitcoind*
+-rwxr-xr-x 1 you you  85050488 mar  4 12:27 bitcoind.dbg*
+-rwxr-xr-x 1 you you  39586776 mar  4 12:27 bitcoin-qt*
+-rwxr-xr-x 1 you you 111445552 mar  4 12:27 bitcoin-qt.dbg*
+-rwxr-xr-x 1 you you   4112824 mar  4 12:27 bitcoin-tx*
+-rwxr-xr-x 1 you you  13497848 mar  4 12:27 bitcoin-tx.dbg*
+-rwxr-xr-x 1 you you   2199488 mar  4 12:27 bitcoin-util*
+-rwxr-xr-x 1 you you   7766024 mar  4 12:27 bitcoin-util.dbg*
+-rwxr-xr-x 1 you you   9686216 mar  4 12:27 bitcoin-wallet*
+-rwxr-xr-x 1 you you  42755592 mar  4 12:27 bitcoin-wallet.dbg*
+-rwxr-xr-x 1 you you  24893312 mar  4 12:27 test_bitcoin*
+-rwxr-xr-x 1 you you 156780072 mar  4 12:27 test_bitcoin.dbg*
 ```
 
-Use `sha256sum` to calculate the `bitcoind` sha256 hashes and compare them to the ones in the corresponding `SHASUMS256` file.
-In this example we should compare our hashes against these lines from the `SHASUMS256-24.0.1.txt` file:
+Use `sha256sum` to calculate the `bitcoind` sha256 hashes and compare them to the ones in the corresponding `SHA256SUMS` file.
+In this example we should compare our hashes against these lines from the `SHA256SUMS-24.0.1.txt` file:
 
 ```
-5a63f7cfa64e7d21005b4fb3956a9192442a4565bd7c03824f5559b9b8499552  bitcoind-24.0.1-aarch64-linux-gnu
-f70da220ebda9ba57dea5c531e1fa04122bb1fb3b11e9bf336b8996a448bf0b1  bitcoind-24.0.1-arm64-apple-darwin
-d31f48b0a06ff754bdc691b88a091bfac88af24a2d75ebf65383ab52b49155ba  bitcoind-24.0.1-x86_64-linux-gnu
+06076453284836c9b4953ad8e1baae1785fdfee72dfeede73645b50d99ab1e3a  bitcoind-24.0.1-aarch64-linux-gnu
+b8de26c038edc6559554e835aa5b360b21df0e885d8778a1254e93f6efc8494c  bitcoind-24.0.1-arm64-apple-darwin
+87c800677f4b7cd34bfd899a50022833f8e51a90f6d0bba848ca1a25e4f982e1  bitcoind-24.0.1-x86_64-linux-gnu
 ```
 
 ```sh
-$ sha256sum guix-build-24.0.1/distsrc-24.0.1-aarch64-linux-gnu/installed/bitcoin-24.0.1/bin/bitcoind
-5a63f7cfa64e7d21005b4fb3956a9192442a4565bd7c03824f5559b9b8499552  guix-build-24.0.1/distsrc-24.0.1-aarch64-linux-gnu/installed/bitcoin-24.0.1/bin/bitcoind
+$ sha256sum guix-build-275e5239b095/distsrc-275e5239b095-aarch64-linux-gnu/installed/bitcoin-275e5239b095/bin/bitcoind
+06076453284836c9b4953ad8e1baae1785fdfee72dfeede73645b50d99ab1e3a  guix-build-275e5239b095/distsrc-275e5239b095-aarch64-linux-gnu/installed/bitcoin-275e5239b095/bin/bitcoind
 
-$ sha256sum guix-build-24.0.1/distsrc-24.0.1-arm64-apple-darwin/installed/bitcoin-24.0.1/bin/bitcoind
-f70da220ebda9ba57dea5c531e1fa04122bb1fb3b11e9bf336b8996a448bf0b1  guix-build-24.0.1/distsrc-24.0.1-arm64-apple-darwin/installed/bitcoin-24.0.1/bin/bitcoind
+$ sha256sum guix-build-275e5239b095/distsrc-275e5239b095-arm64-apple-darwin/installed/bitcoin-275e5239b095/bin/bitcoind 
+b8de26c038edc6559554e835aa5b360b21df0e885d8778a1254e93f6efc8494c  guix-build-275e5239b095/distsrc-275e5239b095-arm64-apple-darwin/installed/bitcoin-275e5239b095/bin/bitcoind
 
-$ sha256sum guix-build-24.0.1/distsrc-24.0.1-x86_64-linux-gnu/installed/bitcoin-24.0.1/bin/bitcoind
-d31f48b0a06ff754bdc691b88a091bfac88af24a2d75ebf65383ab52b49155ba  guix-build-24.0.1/distsrc-24.0.1-x86_64-linux-gnu/installed/bitcoin-24.0.1/bin/bitcoind
+$ sha256sum guix-build-275e5239b095/distsrc-275e5239b095-x86_64-linux-gnu/installed/bitcoin-275e5239b095/bin/bitcoind
+87c800677f4b7cd34bfd899a50022833f8e51a90f6d0bba848ca1a25e4f982e1  guix-build-275e5239b095/distsrc-275e5239b095-x86_64-linux-gnu/installed/bitcoin-275e5239b095/bin/bitcoind
 ```
 
 They're all exact matches. Great success!
@@ -259,7 +242,7 @@ Your three hand-made binaries are byte-per-byte copies of the ones I uploaded in
 
 ## Submit your signature
 
-If you go through all this trouble I encourage you to GPG sign the corresponding SHASUMS256 file (or individual binaries) and submit your signature in an issue.
+If you go through all this trouble I encourage you to GPG sign the corresponding SHA256SUMS file (or individual binaries) and submit your signature in an issue.
 I'll add your name in the main README.md under the [Build Signers] section and include your signature file in the releases page.
 
 ## Other Resources
@@ -275,6 +258,6 @@ I've put this guide together from the following sources:
 [Ryzen 7 7700X]: https://www.amd.com/en/products/cpu/amd-ryzen-7-7700x
 [Apple's developer portal]: https://developer.apple.com/
 [`apple-sdk-tools`]: https://github.com/bitcoin-core/apple-sdk-tools
-[`ordinals-filter.patch`]: https://gist.github.com/luke-jr/4c022839584020444915c84bdd825831
+[`filter-ordinals.patch`]: https://gist.github.com/luke-jr/4c022839584020444915c84bdd825831
 [in this link]: https://github.com/bitcoin/bitcoin/tree/v24.0.1/contrib/guix#recognized-environment-variables
 [Build Signers]: https://github.com/BcnBitcoinOnly/ordisrespector-binaries#build-signers
