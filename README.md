@@ -25,19 +25,18 @@ Bitcoin Core [24.0.1], [23.1], [22.1] and [0.21.2]
 2. Download [oomahq's GPG public key] and use it to verify the integrity on the SHASUMS256 file.
    You must see a `Good signature from "Unhosted Marcelus #371 <oomahq@twitter.com>" [unknown]` message in the output.
    ```sh
-   $ gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 873A132853A3F6D6621DC366981836E35A42A039
-   gpg: key 981836E35A42A039: public key "Unhosted Marcelus #371 <oomahq@twitter.com>" imported
+   $ gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 34BE269FE4268497E45588A884C9BB18153758B4
+   gpg: key 84C9BB18153758B4: public key "Unhosted Marcellus #371 <oomahq@twitter.com>" imported
    gpg: Total number processed: 1
    gpg:               imported: 1
 
    $ gpg --verify SHA256SUMS-23.1-oomahq.asc SHA256SUMS-23.1.txt 
-   gpg: Signature made Mon Feb 20 18:28:45 2023 UTC
-   gpg:                using EDDSA key 873A132853A3F6D6621DC366981836E35A42A039
-   gpg:                issuer "oomahq@twitter.com"
-   gpg: Good signature from "Unhosted Marcelus #371 <oomahq@twitter.com>" [unknown]
+   gpg: Signature made Fri Mar  3 20:56:07 2023 UTC
+   gpg:                using EDDSA key 34BE269FE4268497E45588A884C9BB18153758B4
+   gpg: Good signature from "Unhosted Marcellus #371 <oomahq@twitter.com>" [unknown]
    gpg: WARNING: This key is not certified with a trusted signature!
    gpg:          There is no indication that the signature belongs to the owner.
-   Primary key fingerprint: 873A 1328 53A3 F6D6 621D  C366 9818 36E3 5A42 A039
+   Primary key fingerprint: 34BE 269F E426 8497 E455  88A8 84C9 BB18 1537 58B4
    ```
 
 3. If the signature is OK it means that the SHASUMS256 file has not been tampered.
@@ -68,7 +67,7 @@ If you do your own deterministic build and do this check yourself I invite you t
 
 ### Build Signers
 
-* [oomahq] ([pubkey](https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x873a132853a3f6d6621dc366981836e35a42a039)) - 24.0.1, 23.1, 22.1, 0.21.2, all architectures.
+* [oomahq] ([pubkey](https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x34be269fe4268497e45588a884c9bb18153758b4)) - 24.0.1, 23.1, 22.1, 0.21.2, all architectures.
 
 ## Other Resources
 
@@ -90,7 +89,7 @@ If you do your own deterministic build and do this check yourself I invite you t
 [22.1]: https://github.com/BcnBitcoinOnly/ordisrespector-binaries/releases/tag/22.1
 [0.21.2]: https://github.com/BcnBitcoinOnly/ordisrespector-binaries/releases/tag/0.21.2
 [Releases section]: https://github.com/BcnBitcoinOnly/ordisrespector-binaries/releases
-[oomahq's GPG public key]: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x873a132853a3f6d6621dc366981836e35a42a039
+[oomahq's GPG public key]: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x34be269fe4268497e45588a884c9bb18153758b4
 [Guix build system]: https://github.com/bitcoin/bitcoin/blob/master/contrib/guix/README.md
 [dedicated document]: /Guix-Guide.md
 [oomahq]: https://twitter.com/oomahq

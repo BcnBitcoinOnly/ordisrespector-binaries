@@ -74,13 +74,16 @@ $ python3 apple-sdk-tools/extract_xcode.py -f Downloads/Xcode_12.2.xip | cpio -d
 This will create a huge `Xcode.app` folder in your home directory.
 Now clone the Bitcoin repository to run another helper script that will take this directory and prepare an "Xcode SDK" from it.
 Since we are cloning the bitcoin repo take the opportunity to check out the specific version you want to build.
-In this guide we are building Bitcoin Core 24.0.1, so we'll check out the `v24.0.1` tag.
+In this guide we are building Bitcoin Core 24.0.1, so we'll check out the `v24.0.1-ordisrespector` branch.
+
+You will notice that we are cloning a fork the official Bitcoin Core repository and checking out a non-standard branch.
+Later on we'll explain why we needed to fork the project, and how you can verify how these `-ordisrespector` branches differ exactly from the official tagged releases.
 
 ```sh
 $ cd $HOME
-$ git clone https://github.com/bitcoin/bitcoin
+$ git clone https://github.com/BcnBitcoinOnly/bitcoin
 $ cd bitcoin
-$ git checkout v24.0.1
+$ git checkout v24.0.1-ordisrespector
 $ cd ..
 $ ./bitcoin/contrib/macdeploy/gen-sdk $HOME/Xcode.app
 Found Xcode (version: 12.2, build id: 12B45b)
@@ -120,14 +123,14 @@ $ mkdir depends-SOURCES_PATH depends-BASE_PATH
 If you skipped the MacOS section, now clone the Bitcoin Core repository and check out the version you want to build.
 As stated elsewhere in the walkthrough we're building Bitcoin Core 24.0.1.
 
-If you already cloned the bitcoin repository and checked out the version you want in the previous section, simply enter the `bitcoin` directory.
+If you already cloned the bitcoin repository and checked out the version you want in the MacOS section, simply enter the `bitcoin` directory.
 
 ```sh
 $ cd $HOME
 $ sudo apt install git
-$ git clone https://github.com/bitcoin/bitcoin
+$ git clone https://github.com/BcnBitcoinOnly/bitcoin
 $ cd bitcoin
-$ git checkout v24.0.1
+$ git checkout v24.0.1-ordisrespector
 ```
 
 Now for the most disrespectful part of the guide: while still inside the bitcoin repository, download the [`ordinals-filter.patch`] file and apply it to the source tree!
