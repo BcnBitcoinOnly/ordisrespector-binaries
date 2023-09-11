@@ -172,11 +172,11 @@ If you don't set it, it will build Bitcoin Core for all supported targets (inclu
 The exact targets supported vary for each release, you can find the specific list for 24.0.1 [in this link].
 
 If you skipped the MacOS section it is important to define the `HOSTS` variable without any Apple targets, otherwise Guix won't start.
-In this example we'll tell Guix to only build binaries for Linux x86_64, Linux ARM64 (e.g. for a Raspberry Pi 4) and Apple Silicon (since we actually went through the pain of preparing the Xcode SDK).
+In this example we'll tell Guix to only build binaries for Linux x86_64, Linux ARM64 (e.g. for a Raspberry Pi 4).
 This will also make the build run faster than if it had to build all 9 targets.
 
 ```sh
-$ export HOSTS="x86_64-linux-gnu aarch64-linux-gnu arm64-apple-darwin"
+$ export HOSTS="x86_64-linux-gnu aarch64-linux-gnu"
 ```
 
 ...and we're ready to buidl.
