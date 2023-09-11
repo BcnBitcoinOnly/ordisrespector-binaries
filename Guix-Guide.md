@@ -18,10 +18,10 @@ Just so you know what you're getting into.
 
 ## Install Guix
 
-Start by installing the `guix` package provided by Ubuntu, then update it to the latest stable version with its own update command.
+Start by installing the `guix`, `build-essentials` and `curl` packages provided by Ubuntu, then update it to the latest stable version with its own update command.
 
 ```sh
-$ sudo apt install guix
+$ sudo apt install guix build-essential curl
 $ guix pull
 ```
 
