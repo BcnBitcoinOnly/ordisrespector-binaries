@@ -2,6 +2,7 @@
 
 The following is a step-by-step guide to build your own deterministic Ordisrespector Bitcoin Core.
 If you complete these steps you should get exactly the same binaries (byte-per-byte) as distributed in this repository.
+Deterministic binaries serve to prove that the binaries we distribute have been built from the exact same sources we claim we used.
 
 ## Requirements
 
@@ -172,7 +173,7 @@ If you don't set it, it will build Bitcoin Core for all supported targets (inclu
 The exact targets supported vary for each release, you can find the specific list for 24.0.1 [in this link].
 
 If you skipped the MacOS section it is important to define the `HOSTS` variable without any Apple targets, otherwise Guix won't start.
-In this example we'll tell Guix to only build binaries for Linux x86_64, Linux ARM64 (e.g. for a Raspberry Pi 4).
+In this example we'll tell Guix to only build binaries for Linux x86_64 and Linux ARM64 (e.g. for a Raspberry Pi 4).
 This will also make the build run faster than if it had to build all 9 targets.
 
 ```sh
@@ -192,7 +193,7 @@ Now it'd be a good time to let the machine do the deed and take a break.
 ## Verifying the result
 
 After the build completes it will have created a `guix-build-275e5239b095` directory inside the `bitcoin` project.
-In turn, this directory will have a subdirectory for each target you built (in our case `distsrc-275e5239b095-aarch64-linux-gnu`, `distsrc-275e5239b095-arm64-apple-darwin` and `distsrc-275e5239b095-x86_64-linux-gnu`).
+In turn, this directory will have a subdirectory for each target you built (in our case `distsrc-275e5239b095-aarch64-linux-gnu` and `distsrc-275e5239b095-x86_64-linux-gnu`).
 We are interested in the contents of `installed/bitcoin-275e5239b095/bin` of each of these subdirectories.
 In there you should find your `bitcoind` binary along with some other ones:
 
@@ -222,7 +223,6 @@ In this example we should compare our hashes against these lines from the `SHA25
 
 ```
 06076453284836c9b4953ad8e1baae1785fdfee72dfeede73645b50d99ab1e3a  bitcoind-24.0.1-aarch64-linux-gnu
-b8de26c038edc6559554e835aa5b360b21df0e885d8778a1254e93f6efc8494c  bitcoind-24.0.1-arm64-apple-darwin
 87c800677f4b7cd34bfd899a50022833f8e51a90f6d0bba848ca1a25e4f982e1  bitcoind-24.0.1-x86_64-linux-gnu
 ```
 
@@ -230,15 +230,12 @@ b8de26c038edc6559554e835aa5b360b21df0e885d8778a1254e93f6efc8494c  bitcoind-24.0.
 $ sha256sum guix-build-275e5239b095/distsrc-275e5239b095-aarch64-linux-gnu/installed/bitcoin-275e5239b095/bin/bitcoind
 06076453284836c9b4953ad8e1baae1785fdfee72dfeede73645b50d99ab1e3a  guix-build-275e5239b095/distsrc-275e5239b095-aarch64-linux-gnu/installed/bitcoin-275e5239b095/bin/bitcoind
 
-$ sha256sum guix-build-275e5239b095/distsrc-275e5239b095-arm64-apple-darwin/installed/bitcoin-275e5239b095/bin/bitcoind 
-b8de26c038edc6559554e835aa5b360b21df0e885d8778a1254e93f6efc8494c  guix-build-275e5239b095/distsrc-275e5239b095-arm64-apple-darwin/installed/bitcoin-275e5239b095/bin/bitcoind
-
 $ sha256sum guix-build-275e5239b095/distsrc-275e5239b095-x86_64-linux-gnu/installed/bitcoin-275e5239b095/bin/bitcoind
 87c800677f4b7cd34bfd899a50022833f8e51a90f6d0bba848ca1a25e4f982e1  guix-build-275e5239b095/distsrc-275e5239b095-x86_64-linux-gnu/installed/bitcoin-275e5239b095/bin/bitcoind
 ```
 
-They're all exact matches. Great success!
-Your three hand-made binaries are byte-per-byte copies of the ones I uploaded in this repo.
+They're exact matches. Great success!
+Your hand-made binaries are byte-per-byte copies of the ones I uploaded in this repo.
 
 ## Submit your signature
 

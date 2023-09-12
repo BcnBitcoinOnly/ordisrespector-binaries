@@ -3,6 +3,9 @@
 Ready-made builds of Ordisrespector [Bitcoin Core] binaries.
 If you can replace the `bitcoind` binary from your node and restart it, you can run [Ordisrespector].
 
+These binaries have been built using Bitcoin Core's [Guix build system].
+Guix builds are deterministic, meaning that anyone can follow the same steps and get the exact same binaries, byte-per-byte.
+
 ### Available Versions
 
 Bitcoin Core [24.0.1], [23.1], [22.1] and [0.21.2]
@@ -58,9 +61,6 @@ Bitcoin Core [24.0.1], [23.1], [22.1] and [0.21.2]
 
 ## Build Guide
 
-The binaries have been built using Bitcoin Core's [Guix build system].
-Guix builds are deterministic, meaning that anyone can follow the same steps and get the exact same binaries, byte-per-byte.
-
 Documentation of the build process is maintained in a [dedicated document].
 In the spirit of the Bitcoin ethos, you are encouraged to build your own binaries and verify that they are the same as I distributed in this repo.
 If you do your own deterministic build and do this check yourself I invite you to submit your own GPG signature of the SHA256SUMS file to boost the trust in these binaries.
@@ -85,13 +85,13 @@ If you do your own deterministic build and do this check yourself I invite you t
 
 [Bitcoin Core]: https://bitcoincore.org
 [Ordisrespector]: https://twitter.com/oomahq/status/1623052780280885253
+[Guix build system]: https://github.com/bitcoin/bitcoin/blob/master/contrib/guix/README.md
 [24.0.1]: https://github.com/BcnBitcoinOnly/ordisrespector-binaries/releases/tag/24.0.1
 [23.1]: https://github.com/BcnBitcoinOnly/ordisrespector-binaries/releases/tag/23.1
 [22.1]: https://github.com/BcnBitcoinOnly/ordisrespector-binaries/releases/tag/22.1
 [0.21.2]: https://github.com/BcnBitcoinOnly/ordisrespector-binaries/releases/tag/0.21.2
 [Releases section]: https://github.com/BcnBitcoinOnly/ordisrespector-binaries/releases
 [oomahq's GPG public key]: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x34be269fe4268497e45588a884c9bb18153758b4
-[Guix build system]: https://github.com/bitcoin/bitcoin/blob/master/contrib/guix/README.md
 [dedicated document]: /Guix-Guide.md
 [oomahq]: https://twitter.com/oomahq
 [federicociro]: https://github.com/federicociro
