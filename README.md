@@ -68,6 +68,7 @@ If you do your own deterministic build and do this check yourself I invite you t
 ### Build Signers
 
 * [oomahq] ([pubkey](https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x34be269fe4268497e45588a884c9bb18153758b4)) - 24.0.1, 23.1, 22.1, 0.21.2, all architectures.
+* [federicociro] ([pubkey](https://keys.openpgp.org/vks/v1/by-fingerprint/423A87EDA398FD30E6614FF1B4B16B2D677120AF), https://github.com/BcnBitcoinOnly/ordisrespector-binaries/issues/3) - 24.0.1, x86_64-linux-gnu.
 
 ## Other Resources
 
@@ -93,3 +94,4 @@ If you do your own deterministic build and do this check yourself I invite you t
 [Guix build system]: https://github.com/bitcoin/bitcoin/blob/master/contrib/guix/README.md
 [dedicated document]: /Guix-Guide.md
 [oomahq]: https://twitter.com/oomahq
+[federicociro]: https://github.com/federicociro
